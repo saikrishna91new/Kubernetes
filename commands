@@ -199,3 +199,20 @@ Pod Template:
 ---------------------------------------
 kubectl describe daemonset wacve-net -n kube-system | grep -i image 
 
+
+kubectl get pods --all-namespaces
+kube-system   kube-scheduler-controlplane            1/1     Running   0          12m   > static pods append with controle plane
+Run the command ps -aux | grep kubelet and identify the config file - --config=/var/lib/kubelet/config.yaml. Then check in the config file for staticPodPath.
+staticPodPath: /etc/kubernetes/manifests
+
+create static pod >> kubectl run --restart=Never --image=busybox static-busybox --dry-run=client -o yaml --command -- sleep 1000 > /etc/kubernetes/manifests/static-busybox.yaml
+update the image in pod >> kubectl run --restart=Never --image=busybox:1.28.4 static-busybox --dry-run=client -o yaml --command -- sleep 1000 > /etc/kubernetes/manifests/static-busybox.yaml
+
+how to delete static pods??
+find on which node pod got sheduled with the command kubectl get pods -o wide and ssh to that node and check the /var/lib/kubelet/config.yaml file for static pod path and delet
+the poddefination file in that path
+
+
+
+
+
