@@ -231,3 +231,60 @@ status: {}
 
 kubectl taint nodes controlplane node-role.kubernetes.io/master:NoSchedule-
 >>to untaint a node
+
+
+
+
+spec:                                      
+  containers:                              
+  - args:                                  
+    - sleep                                
+    - "1000"                               
+    image: ubuntu                          
+    imagePullPolicy: Always                
+    name: cpu-stress                       
+    resources:                             
+      limits:                              
+        cpu: "2"           
+      requests:            
+        cpu: "1"           
+    terminationMessagePath: /dev/termination-log
+    
+    
+
+
+State:          Waiting
+      Reason:       CrashLoopBackOff
+    Last State:     Terminated
+      Reason:       OOMKilled
+      
+      
+      
+  
+  
+  kubectl get po elephant -o yaml > elephant.yaml
+  
+  
+  
+  
+    resources:
+      limits:
+        memory: 10Mi
+      requests:
+        memory: 5Mi
+	
+
+
+
+kubectl get daemonsets --all-namespaces
+kubectl describe daemonset kube-proxy --namespace=kube-system
+
+Desired Number of Nodes Scheduled: 1
+Current Number of Nodes Scheduled: 1
+Number of Nodes Scheduled with Up-to-date Pods: 1
+Number of Nodes Scheduled with Available Pods: 1
+Number of Nodes Misscheduled: 0
+Pods Status:  1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+
+
