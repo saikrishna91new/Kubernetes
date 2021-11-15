@@ -222,6 +222,20 @@ update the below in default sheduler yaml to create the own sheduler in -command
 
 describe pod to see the scheduler name in the events
 how to force the pod to use the customised scheduler?? in the pod spec add schedulerName: <customised sheduler name>
+---------------------------------------------------
+git clone https://github.com/kodekloudhub/kubernetes-metrics-server.git
+kubectl top node      > to check the node metrics
+kubectl top pod       > to check the pod metrices
+kubectl top node --sort-by='cpu' --no-headers | head -1                     > Heigest cpu
+kubectl top node --sort-by='memory' --no-headers | head -1 
+kubectl top pod --sort-by='memory' --no-headers | head -1
+kubectl top pod --sort-by='cpu' --no-headers | tail -1                      >   leaset cpu
+
+
+
+
+
+
 
 
 
