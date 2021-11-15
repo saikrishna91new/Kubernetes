@@ -211,6 +211,18 @@ update the image in pod >> kubectl run --restart=Never --image=busybox:1.28.4 st
 how to delete static pods??
 find on which node pod got sheduled with the command kubectl get pods -o wide and ssh to that node and check the /var/lib/kubelet/config.yaml file for static pod path and delet
 the poddefination file in that path
+------------------------------------------------------------------
+/etc/kubernetes/manifests/kube-scheduler.yaml   -default scheduler fle
+
+update the below in default sheduler yaml to create the own sheduler in -command section
+- --leader-elect=false
+- --port=10282
+- --scheduler-name=my-scheduler
+- --secure-port=0
+
+
+
+
 
 
 
