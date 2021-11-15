@@ -220,6 +220,11 @@ update the below in default sheduler yaml to create the own sheduler in -command
 - --scheduler-name=my-scheduler
 - --secure-port=0
 
+describe pod to see the scheduler name in the events
+how to force the pod to use the customised scheduler?? in the pod spec add schedulerName: <customised sheduler name>
+
+
+
 
 
 
