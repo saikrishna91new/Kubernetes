@@ -230,6 +230,21 @@ kubectl top node --sort-by='cpu' --no-headers | head -1                     > He
 kubectl top node --sort-by='memory' --no-headers | head -1 
 kubectl top pod --sort-by='memory' --no-headers | head -1
 kubectl top pod --sort-by='cpu' --no-headers | tail -1                      >   leaset cpu
+kubectl logs webapp-2 
+kubectl logs webapp-2 -c simple-webapp
+
+
+for i in {1..35}; do
+   kubectl exec --namespace=kube-public curl -- sh -c 'test=`wget -qO- -T 2  http://webapp-service.default.svc.cluster.local:8080/info 2>&1` && echo "$test OK" || echo "Failed"';
+   echo ""
+done
+
+kubectl describe deployment > 
+StrategyType:           RollingUpdate
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+
+
+
 
 
 
