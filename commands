@@ -242,6 +242,47 @@ done
 kubectl describe deployment > 
 StrategyType:           RollingUpdate
 RollingUpdateStrategy:  25% max unavailable, 25% max surge
+--------------------------------------------------
+spec:
+  minReadySeconds: 20
+  progressDeadlineSeconds: 600
+  replicas: 4
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      name: webapp
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        name: webapp
+    spec:
+      containers:
+      - image: kodekloud/webapp-color:v1
+        imagePullPolicy: IfNotPresent
+   ----------------------------
+   describe deployemtn will display the commands assosiated with that pod
+   pod defination file with the sleep 5000 sec
+   
+   command:  ['sleep', '5000']
+   
+   command: ["sleep"]
+    args: ["5000"]
+    
+    command: ["sleep"]
+    args: ["5000"]
+    ----------------------------
+    sleep arguments always be in doubl coated args
+    
+    
+
+
+
 
 
 
