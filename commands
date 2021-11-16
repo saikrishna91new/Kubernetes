@@ -277,9 +277,71 @@ spec:
     command: ["sleep"]
     args: ["5000"]
     ----------------------------
-    sleep arguments always be in doubl coated args
-    
-    
+    sleep arguments always be in double coated args
+ -------------------------------------
+kubect describe to check the env variable
+Environment:
+      APP_COLOR:  pink
+      
+
+kubectl get configmaps
+kubectl describe configmap db-config
+kubectl create configmap webapp-config-map --from-literal=APP_COLOR=darkblue
+
+containers:
+  - envFrom:
+    - configMapRef:
+         name: webapp-config-map
+         
+
+containers:
+  - env:
+    - name: APP_COLOR
+      value: green
+      
+-------------------
+kubectl get secrets
+kubectl describe secret default-token-jkb6b  and look at the data field to find the screts
+kubernetes.io/service-account-token
+kubectl create secret generic db-secret --from-literal=DB_Host=sql01 --from-literal=DB_User=root --from-literal=DB_Password=password123
+kubectl delete secret db-secret
+kubectl -n elastic-stack exec -it app -- cat /log/app.log
+
+
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app
+  namespace: elastic-stack
+  labels:
+    name: app
+spec:
+  containers:
+  - name: app
+    image: kodekloud/event-simulator
+    volumeMounts:
+    - mountPath: /log
+      name: log-volume
+
+  - name: sidecar
+    image: kodekloud/filebeat-configured
+    volumeMounts:
+    - mountPath: /var/log/event-simulator/
+      name: log-volume
+
+  volumes:
+  - name: log-volume
+    hostPath:
+      # directory location on host
+      path: /var/log/webapp
+      # this field is optional
+      type: DirectoryOrCreate
+      
+      
+ 
+
+
 
 
 
