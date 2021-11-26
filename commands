@@ -339,8 +339,24 @@ spec:
       type: DirectoryOrCreate
       
  
+-----------------------------------------
+kubectl get nodes tocheck the version
 
- 
+kubectl -n kube-system get cm kubeadm-config -oyaml > to look the kubeconfig file
+kubeadm upgrade apply v1.19.16 > this type of command wil displayed with kubeadm upgrade plan command output
+
+kubectl drain controlplane --ignore-daemonsets  > to drain and ignore deamon sets
+
+steps to update worker node:
+-----------------------------
+1> update the repo: yum update -y
+2> update the kubeadm : yum instal kubeadm=<version>
+3> kubeadm upgrade apply v1.20.0
+4>apt install kubelet=1.20.0-00
+5>systemctl restart kubelet
+-----------------------------------
+kubectl uncordon controlplane - to shedue the pods on node
+
 
 
 
