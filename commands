@@ -357,6 +357,45 @@ steps to update worker node:
 -----------------------------------
 kubectl uncordon controlplane - to shedue the pods on node
 
+kubectl logs etcd-controlplane -n kube-system   - to check the versio of etcd
+kubectl describe pod etcd-controlplane -n kube-system - check at the image option for the version
+kubectl describe pod etcd-controlplane -n kube-system and look for --listen-client-urls and cert for cert path --trusted-ca-file for ca ert
+
+
+ETCDCTL_API=3 etcdctl --endpoints=https://[127.0.0.1]:2379 \
+--cacert=/etc/kubernetes/pki/etcd/ca.crt \
+--cert=/etc/kubernetes/pki/etcd/server.crt \
+--key=/etc/kubernetes/pki/etcd/server.key \
+snapshot save /opt/snapshot-pre-boot.db
+
+
+ETCDCTL_API=3 etcdctl  --data-dir /var/lib/etcd-from-backup \
+snapshot restore /opt/snapshot-pre-boot.db
+
+
+
+
+root@controlplane:~# ETCDCTL_API=3 etcdctl  --data-dir /var/lib/etcd-from-backup \
+> snapshot restore /opt/snapshot-pre-boot.db
+2021-11-29 06:51:33.485729 I | mvcc: restore compact to 1646
+2021-11-29 06:51:33.499759 I | etcdserver/membership: added member 8e9e05c52164694d [http://localhost:2380] to cluster cdf818194e3a8c32
+root@controlplane:~# 
+
+
+Next, update the /etc/kubernetes/manifests/etcd.yaml:
+
+
+- hostPath:
+      path: /var/lib/etcd-from-backup
+      type: DirectoryOrCreate
+    name: etcd-data
+    
+change the host path for backup directory
+ETCD pod is automatically re-created as this is a static pod placed under the /etc/kubernetes/manifests directory.
+Wait 1-2 to mins for this pods to restart. You can run a watch "docker ps | grep etcd" command to see when the ETCD pod is restarted
+if the etcd pod is not getting Ready 1/1, then restart it by kubectl delete pod -n kube-system etcd-controlplane and wait 1 minute.
+
+
 
 
 
