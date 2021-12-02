@@ -452,6 +452,30 @@ kubectl create rolebinding dev-user-binding --namespace=default --role=developer
 kubectl edit role developer -n blue
 
 
+kubectl create secret docker-registry private-reg-cred --docker-username=dock_user --docker-password=dock_password --docker-server=myprivateregistry.com:5000 --docker-email=dock_user@myprivateregistry.com
+kubectl exec ubuntu-sleeper -- whoami
+
+
+pod.yaml
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ubuntu-sleeper
+  namespace: default
+spec:
+  securityContext:
+    runAsUser: 1010
+  containers:
+  - command:
+    - sleep
+    - "4800"
+    image: ubuntu
+    name: ubuntu-sleeper
+    
+    kubectl cluster-info
+    
+    
 
 
 
