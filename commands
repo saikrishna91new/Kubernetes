@@ -475,6 +475,68 @@ spec:
     
     kubectl cluster-info
     
+    ip a | grep ip
+    ip link
+    
+    ip link show eth0 > mac address
+    arp node01 > mac address for node
+    ip link | grep docker
+    ip route
+    ip route show default
+    netstat -nplt | grep scheduler
+    
+    netstat -anp | grep etcd > to see more connections 
+    
+    ps -aux | grep kubelet | grep network > for networ plugin
+    
+    The CNI binaries are located under /opt/cni/bin by default.
+    
+    
+    root@controlplane:~# ls -ltr /opt/cni/bin
+total 70496
+-rwxr-xr-x 1 root root  4159518 May 13  2020 bandwidth
+-rwxr-xr-x 1 root root  5945760 May 13  2020 firewall
+-rwxr-xr-x 1 root root  3069556 May 13  2020 flannel
+-rwxr-xr-x 1 root root  3392826 May 13  2020 sbr
+-rwxr-xr-x 1 root root  3939867 May 13  2020 portmap
+-rwxr-xr-x 1 root root  3356587 May 13  2020 tuning
+-rwxr-xr-x 1 root root  4671647 May 13  2020 bridge
+-rwxr-xr-x 1 root root  4174394 May 13  2020 host-device
+-rwxr-xr-x 1 root root  4314598 May 13  2020 ipvlan
+-rwxr-xr-x 1 root root  3209463 May 13  2020 loopback
+-rwxr-xr-x 1 root root  4389622 May 13  2020 macvlan
+-rwxr-xr-x 1 root root  4590277 May 13  2020 ptp
+-rwxr-xr-x 1 root root  4314446 May 13  2020 vlan
+-rwxr-xr-x 1 root root 12124326 May 13  2020 dhcp
+-rwxr-xr-x 1 root root  2885430 May 13  2020 static
+-rwxr-xr-x 1 root root  3614480 May 13  2020 host-local
+root@controlplane:~# 
+
+
+Run the command: ls /etc/cni/net.d/ and identify the name of the plugin.
+Look at the type field in file /etc/cni/net.d/10-flannel.conflist. for What binary executable file will be run by kubelet after a container and its associated namespace are created.
+
+What network range are the nodes in the cluster part of?  ip a | grep eth0
+
+What is the range of IP addresses configured for PODs on this cluster?
+
+What is the range of IP addresses configured for PODs on this cluster? kubectl logs weave-net-7g762 weave -n kube-system | grep ipalloc-range
+
+What is the IP Range configured for the services within the cluster? cat /etc/kubernetes/manifests/kube-apiserver.yaml | grep cluster-ip-range
+
+What type of proxy is the kube-proxy configured to use? kubectl logs kube-proxy-4hkmp -n kube-system | grep iptable
+W1202 12:01:50.801661       1 server_others.go:578] Unknown proxy mode "", assuming iptables proxy
+I1202 12:01:50.829944       1 server_others.go:185] Using iptables Proxier.
+
+Where is the configuration file located for configuring the CoreDNS service?
+root@controlplane:~# kubectl -n kube-system describe deployments.apps coredns | grep -A2 Args | grep Corefile
+
+How is the Corefile passed in to the CoreDNS POD? kubectl get cm -n kube-system
+kubectl exec -it hr -- nslookup mysql.payroll > /root/CKA/nslookup.out
+
+
+      /etc/coredns/Corefile
+    
     
 
 
