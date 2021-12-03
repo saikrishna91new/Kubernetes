@@ -1,0 +1,502 @@
+kubectl delete pod --grace-period=0 --force nginx
+kubectl run redis --image=redis123 --dry-run=client -o yaml > redis-defination.yaml
+kubectl apply -f redis-defination.yaml
+------------------------------------------
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: redis
+  name: redis
+spec:
+  containers:
+  - image: redis123
+    name: redis
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+--------------------------------------------------------
+kubectl describe rs new-replica-set | grep Image
+kubectl explain replicaset | grep VERSION
+--------------------------------------------
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: replicaset-1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        tier: frontend
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+-------------------------------------------------
+for var in $(kubectl get pods | grep "Image" | awk '{print $1}'); do kubectl delete pod $var; done
+kubectl scale rs new-replica-set --replicas=5 or edit
+---------------------------------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      name: busybox-pod
+  template:
+    metadata:
+      labels:
+        name: busybox-pod
+    spec:
+      containers:
+      - name: busybox-container
+        image: busybox888
+        command:
+        - sh
+        - "-c"
+        - echo Hello Kubernetes! && sleep 3600
+-------------------------------------------------
+kubectl create deployment httpd-frontend --image=httpd:2.4-alpine --replicas=3
+kubectl delete all --all -n <namespace>
+kubectl get service
+That is a default service created by Kubernetes at launch.
+kubectl describe svc kubernetes - to see the target port, labels configured, end pointss attched
+The range of valid ports is 30000-32767
+---------------------------------------------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp-service
+spec:
+  type: NodePort
+  ports:
+    - targetPort: 8080
+      port: 8080
+      nodePort: 30080
+  selector:
+    name: simple-webapp
+-----------------------------------------------------------------
+kubectl expose pod redis --port=6379 --name redis-service    >> by defaylt cluster ip
+kubectl run httpd --image=httpd:apline --port=80 --expose    >> pod along with service
+kubectl create deployment webapp --image=kodekloud/webapp-color --replicas=3
+kubectl run custom-nginx --image=nginx --port=8080   >> container port 8080
+Manual sheduling
+-------------------------------
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  nodeName: node01      
+  containers:
+  -  image: nginx
+     name: nginx
+-----------------------------------------
+kubectl get pods --selector env=dev
+kubectl get all --selector env=prod
+kubectl get all --selector env=prod,bu=finance,tier=frontend
+kubectl describe node node01 >>>>>>>>>>>to see the tains on node
+kubectl taint nodes node01 spray=mortein:NoSchedule
+yaml file with tolerant:
+---------------------------------------------
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: bee
+  name: bee
+spec:
+  containers:
+  - image: nginx
+    name: bee
+    resources: {}
+  tolerations:
+  - key: spray
+    value: mortein
+    effect: NoSchedule
+    operator: Equal  
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+---------------------------------------------------
+kubectl taint nodes controlplane node-role.kubernetes.io/master:NoSchedule-          >>to untaint a node
+
+spec:                                      
+  containers:                              
+  - args:                                  
+    - sleep                                
+    - "1000"                               
+    image: ubuntu                          
+    imagePullPolicy: Always                
+    name: cpu-stress                       
+    resources:                             
+      limits:                              
+        cpu: "2"           
+      requests:            
+        cpu: "1"           
+    terminationMessagePath: /dev/termination-log
+    
+
+State:          Waiting
+      Reason:       CrashLoopBackOff
+    Last State:     Terminated
+      Reason:       OOMKilled
+----------------------------      
+kubectl get po elephant -o yaml > elephant.yaml
+-------------------------------------  
+      resources:
+      limits:
+        memory: 10Mi
+      requests:
+        memory: 5Mi
+------------------------	
+kubectl get daemonsets --all-namespaces
+kubectl describe daemonset kube-proxy --namespace=kube-system
+
+Desired Number of Nodes Scheduled: 1
+Current Number of Nodes Scheduled: 1
+Number of Nodes Scheduled with Up-to-date Pods: 1
+Number of Nodes Scheduled with Available Pods: 1
+Number of Nodes Misscheduled: 0
+Pods Status:  1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+---------------------------------------
+kubectl describe daemonset wacve-net -n kube-system | grep -i image 
+kube-system   kube-scheduler-controlplane            1/1     Running   0          12m   > static pods append with controle plane
+Run the command ps -aux | grep kubelet and identify the config file - --config=/var/lib/kubelet/config.yaml. Then check in the config file for staticPodPath.
+staticPodPath: /etc/kubernetes/manifests
+create static pod >> kubectl run --restart=Never --image=busybox static-busybox --dry-run=client -o yaml --command -- sleep 1000 > /etc/kubernetes/manifests/static-busybox.yaml
+update the image in pod >> kubectl run --restart=Never --image=busybox:1.28.4 static-busybox --dry-run=client -o yaml --command -- sleep 1000 > /etc/kubernetes/manifests/static-busybox.yaml
+how to delete static pods??
+find on which node pod got sheduled with the command kubectl get pods -o wide and ssh to that node and check the /var/lib/kubelet/config.yaml file for static pod path and delet
+the poddefination file in that path
+------------------------------------------------------------------
+/etc/kubernetes/manifests/kube-scheduler.yaml   -default scheduler fle
+
+update the below in default sheduler yaml to create the own sheduler in -command section
+- --leader-elect=false
+- --port=10282
+- --scheduler-name=my-scheduler
+- --secure-port=0
+
+describe pod to see the scheduler name in the events
+how to force the pod to use the customised scheduler?? in the pod spec add schedulerName: <customised sheduler name>
+---------------------------------------------------
+git clone https://github.com/kodekloudhub/kubernetes-metrics-server.git
+kubectl top node      > to check the node metrics
+kubectl top pod       > to check the pod metrices
+kubectl top node --sort-by='cpu' --no-headers | head -1                     > Heigest cpu
+kubectl top node --sort-by='memory' --no-headers | head -1 
+kubectl top pod --sort-by='memory' --no-headers | head -1
+kubectl top pod --sort-by='cpu' --no-headers | tail -1                      >   leaset cpu
+kubectl logs webapp-2 
+kubectl logs webapp-2 -c simple-webapp
+
+
+for i in {1..35}; do
+   kubectl exec --namespace=kube-public curl -- sh -c 'test=`wget -qO- -T 2  http://webapp-service.default.svc.cluster.local:8080/info 2>&1` && echo "$test OK" || echo "Failed"';
+   echo ""
+done
+
+kubectl describe deployment > 
+StrategyType:           RollingUpdate
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+--------------------------------------------------
+spec:
+  minReadySeconds: 20
+  progressDeadlineSeconds: 600
+  replicas: 4
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      name: webapp
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        name: webapp
+    spec:
+      containers:
+      - image: kodekloud/webapp-color:v1
+        imagePullPolicy: IfNotPresent
+   ----------------------------
+   describe deployemtn will display the commands assosiated with that pod
+   pod defination file with the sleep 5000 sec
+   
+   command:  ['sleep', '5000']
+   
+   command: ["sleep"]
+    args: ["5000"]
+    
+    command: ["sleep"]
+    args: ["5000"]
+    ----------------------------
+    sleep arguments always be in double coated args
+ -------------------------------------
+kubect describe to check the env variable
+Environment:
+      APP_COLOR:  pink
+      
+
+kubectl get configmaps
+kubectl describe configmap db-config
+kubectl create configmap webapp-config-map --from-literal=APP_COLOR=darkblue
+
+containers:
+  - envFrom:
+    - configMapRef:
+         name: webapp-config-map
+         
+
+containers:
+  - env:
+    - name: APP_COLOR
+      value: green
+      
+-------------------
+kubectl get secrets
+kubectl describe secret default-token-jkb6b  and look at the data field to find the screts
+kubernetes.io/service-account-token
+kubectl create secret generic db-secret --from-literal=DB_Host=sql01 --from-literal=DB_User=root --from-literal=DB_Password=password123
+kubectl delete secret db-secret
+kubectl -n elastic-stack exec -it app -- cat /log/app.log
+
+
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app
+  namespace: elastic-stack
+  labels:
+    name: app
+spec:
+  containers:
+  - name: app
+    image: kodekloud/event-simulator
+    volumeMounts:
+    - mountPath: /log
+      name: log-volume
+
+  - name: sidecar
+    image: kodekloud/filebeat-configured
+    volumeMounts:
+    - mountPath: /var/log/event-simulator/
+      name: log-volume
+
+  volumes:
+  - name: log-volume
+    hostPath:
+      # directory location on host
+      path: /var/log/webapp
+      # this field is optional
+      type: DirectoryOrCreate
+      
+ 
+-----------------------------------------
+kubectl get nodes > tocheck the version
+kubectl -n kube-system get cm kubeadm-config -oyaml > to look the kubeconfig file
+kubeadm upgrade apply v1.19.16 > this type of command wil displayed with kubeadm upgrade plan command output
+kubectl drain controlplane --ignore-daemonsets  > to drain and ignore deamon sets
+steps to update worker node:
+-----------------------------
+1> update the repo: yum update -y
+2> update the kubeadm : yum instal kubeadm=<version>
+3> kubeadm upgrade apply v1.20.0
+4>apt install kubelet=1.20.0-00
+5>systemctl restart kubelet
+-----------------------------------
+kubectl uncordon controlplane - to shedue the pods on node
+kubectl logs etcd-controlplane -n kube-system   - to check the versio of etcd
+kubectl describe pod etcd-controlplane -n kube-system - check at the image option for the version
+kubectl describe pod etcd-controlplane -n kube-system and look for --listen-client-urls and cert for cert path --trusted-ca-file for ca ert
+
+ETCDCTL_API=3 etcdctl --endpoints=https://[127.0.0.1]:2379 \
+--cacert=/etc/kubernetes/pki/etcd/ca.crt \
+--cert=/etc/kubernetes/pki/etcd/server.crt \
+--key=/etc/kubernetes/pki/etcd/server.key \
+snapshot save /opt/snapshot-pre-boot.db
+
+ETCDCTL_API=3 etcdctl  --data-dir /var/lib/etcd-from-backup \
+snapshot restore /opt/snapshot-pre-boot.db
+
+root@controlplane:~# ETCDCTL_API=3 etcdctl  --data-dir /var/lib/etcd-from-backup \
+> snapshot restore /opt/snapshot-pre-boot.db
+2021-11-29 06:51:33.485729 I | mvcc: restore compact to 1646
+2021-11-29 06:51:33.499759 I | etcdserver/membership: added member 8e9e05c52164694d [http://localhost:2380] to cluster cdf818194e3a8c32
+root@controlplane:~# 
+
+
+Next, update the /etc/kubernetes/manifests/etcd.yaml:
+
+
+- hostPath:
+      path: /var/lib/etcd-from-backup
+      type: DirectoryOrCreate
+    name: etcd-data
+    
+change the host path for backup directory
+ETCD pod is automatically re-created as this is a static pod placed under the /etc/kubernetes/manifests directory.
+Wait 1-2 to mins for this pods to restart. You can run a watch "docker ps | grep etcd" command to see when the ETCD pod is restarted
+if the etcd pod is not getting Ready 1/1, then restart it by kubectl delete pod -n kube-system etcd-controlplane and wait 1 minute.
+
+
+openssl x509 -in /etc/kubernetes/pki/apiserver.crt -text | grep CN
+penssl x509 -in /etc/kubernetes/pki/etcd/server.crt -text | grep DNS
+openssl x509 -in /etc/kubernetes/pki/ca.crt -text | grep Not
+cat kube-apiserver.yaml | grep server-cert
+
+apiVersion: certificates.k8s.io/v1
+kind: CertificateSigningRequest
+metadata:
+  name: akshay
+spec:
+  groups:
+  - system:authenticated
+  request: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURSBSRVFVRVNULS0tLS0KTUlJQ1ZqQ0NBVDRDQVFBd0VURVBNQTBHQTFVRUF3d0dZV3R6YUdGNU1JSUJJakFOQmdrcWhraUc5dzBCQVFFRgpBQU9DQVE4QU1JSUJDZ0tDQVFFQXY4azZTTE9HVzcrV3JwUUhITnI2TGFROTJhVmQ1blNLajR6UEhsNUlJYVdlCmJ4RU9JYkNmRkhKKzlIOE1RaS9hbCswcEkwR2xpYnlmTXozL2lGSWF3eGVXNFA3bDJjK1g0L0lqOXZQVC9jU3UKMDAya2ZvV0xUUkpQbWtKaVVuQTRpSGxZNDdmYkpQZDhIRGFuWHM3bnFoenVvTnZLbWhwL2twZUVvaHd5MFRVMAo5bzdvcjJWb1hWZTVyUnNoMms4dzV2TlVPL3BBdEk4VkRydUhCYzRxaHM3MDI1ZTZTUXFDeHUyOHNhTDh1blJQCkR6V2ZsNVpLcTVpdlJNeFQrcUo0UGpBL2pHV2d6QVliL1hDQXRrRVJyNlMwak9XaEw1Q0ErVU1BQmd5a1c5emQKTmlXbnJZUEdqVWh1WjZBeWJ1VzMxMjRqdlFvbndRRUprNEdoayt2SU53SURBUUFCb0FBd0RRWUpLb1pJaHZjTgpBUUVMQlFBRGdnRUJBQi94dDZ2d2EweWZHZFpKZ1k2ZDRUZEFtN2ZiTHRqUE15OHByTi9WZEdxN25oVDNUUE5zCjEwRFFaVGN6T21hTjVTZmpTaVAvaDRZQzQ0QjhFMll5Szg4Z2lDaUVEWDNlaDFYZnB3bnlJMVBDVE1mYys3cWUKMkJZTGJWSitRY040MDU4YituK24wMy9oVkN4L1VRRFhvc2w4Z2hOaHhGck9zRUtuVExiWHRsK29jQ0RtN3I3UwpUYTFkbWtFWCtWUnFJYXFGSDd1dDJveHgxcHdCdnJEeGUvV2cybXNqdHJZUXJ3eDJmQnErQ2Z1dm1sVS9rME4rCml3MEFjbVJsMy9veTdqR3ptMXdqdTJvNG4zSDNKQ25SbE41SnIyQkZTcFVQU3dCL1lUZ1ZobHVMNmwwRERxS3MKNTdYcEYxcjZWdmJmbTRldkhDNnJCSnNiZmI2ZU1KejZPMUU9Ci0tLS0tRU5EIENFUlRJRklDQVRFIFJFUVVFU1QtLS0tLQo=
+  signerName: kubernetes.io/kube-apiserver-client
+  usages:
+  - client auth
+
+kubectl get csr
+kubectl certificate approve akshay
+kubectl certificate deny agent-smith
+kubectl delete csr agent-smith
+
+kubectl config view
+kubectl config view --kubeconfig my-kube-config
+kubectl config --kubeconfig=/root/my-kube-config use-context research
+kubectl config --kubeconfig=/root/my-kube-config current-context
+
+kubectl describe pod kube-apiserver-controlplane -n kube-system | grep authorization-mode
+kubectl get roles
+
+PolicyRule:
+  Resources   Non-Resource URLs  Resource Names  Verbs
+  ---------   -----------------  --------------  -----
+  configmaps  []                 [kube-proxy]    [get]
+root@controlplane:~# 
+
+kubectl get rolebinding --all-namespaces
+
+Subjects:
+  Kind   Name                                             Namespace
+  ----   ----                                             ---------
+  Group  system:bootstrappers:kubeadm:default-node-token  
+  
+ 
+ 
+kubectl get pods --as dev-user
+kubectl create role developer --namespace=default --verb=list,create,delete --resource=pods
+kubectl create rolebinding dev-user-binding --namespace=default --role=developer --user=dev-user
+kubectl edit role developer -n blue
+kubectl create secret docker-registry private-reg-cred --docker-username=dock_user --docker-password=dock_password --docker-server=myprivateregistry.com:5000 --docker-email=dock_user@myprivateregistry.com
+kubectl exec ubuntu-sleeper -- whoami
+
+
+pod.yaml
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ubuntu-sleeper
+  namespace: default
+spec:
+  securityContext:
+    runAsUser: 1010
+  containers:
+  - command:
+    - sleep
+    - "4800"
+    image: ubuntu
+    name: ubuntu-sleeper
+    
+kubectl cluster-info
+ip a | grep ip
+ip link
+ip link show eth0 > mac address
+arp node01 > mac address for node
+ip link | grep docker
+ip route
+ip route show default
+netstat -nplt | grep scheduler
+netstat -anp | grep etcd > to see more connections 
+ps -aux | grep kubelet | grep network > for networ plugin
+    
+    The CNI binaries are located under /opt/cni/bin by default.
+    
+    
+    root@controlplane:~# ls -ltr /opt/cni/bin
+total 70496
+-rwxr-xr-x 1 root root  4159518 May 13  2020 bandwidth
+-rwxr-xr-x 1 root root  5945760 May 13  2020 firewall
+-rwxr-xr-x 1 root root  3069556 May 13  2020 flannel
+-rwxr-xr-x 1 root root  3392826 May 13  2020 sbr
+-rwxr-xr-x 1 root root  3939867 May 13  2020 portmap
+-rwxr-xr-x 1 root root  3356587 May 13  2020 tuning
+-rwxr-xr-x 1 root root  4671647 May 13  2020 bridge
+-rwxr-xr-x 1 root root  4174394 May 13  2020 host-device
+-rwxr-xr-x 1 root root  4314598 May 13  2020 ipvlan
+-rwxr-xr-x 1 root root  3209463 May 13  2020 loopback
+-rwxr-xr-x 1 root root  4389622 May 13  2020 macvlan
+-rwxr-xr-x 1 root root  4590277 May 13  2020 ptp
+-rwxr-xr-x 1 root root  4314446 May 13  2020 vlan
+-rwxr-xr-x 1 root root 12124326 May 13  2020 dhcp
+-rwxr-xr-x 1 root root  2885430 May 13  2020 static
+-rwxr-xr-x 1 root root  3614480 May 13  2020 host-local
+root@controlplane:~# 
+
+
+Run the command: ls /etc/cni/net.d/ and identify the name of the plugin.
+Look at the type field in file /etc/cni/net.d/10-flannel.conflist. for What binary executable file will be run by kubelet after a container and its associated namespace are created.
+What network range are the nodes in the cluster part of?  ip a | grep eth0
+What is the range of IP addresses configured for PODs on this cluster?
+What is the range of IP addresses configured for PODs on this cluster? kubectl logs weave-net-7g762 weave -n kube-system | grep ipalloc-range
+What is the IP Range configured for the services within the cluster? cat /etc/kubernetes/manifests/kube-apiserver.yaml | grep cluster-ip-range
+What type of proxy is the kube-proxy configured to use? kubectl logs kube-proxy-4hkmp -n kube-system | grep iptable
+W1202 12:01:50.801661       1 server_others.go:578] Unknown proxy mode "", assuming iptables proxy
+I1202 12:01:50.829944       1 server_others.go:185] Using iptables Proxier.
+
+Where is the configuration file located for configuring the CoreDNS service?
+root@controlplane:~# kubectl -n kube-system describe deployments.apps coredns | grep -A2 Args | grep Corefile
+How is the Corefile passed in to the CoreDNS POD? kubectl get cm -n kube-system
+kubectl exec -it hr -- nslookup mysql.payroll > /root/CKA/nslookup.out
+/etc/coredns/Corefile
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
