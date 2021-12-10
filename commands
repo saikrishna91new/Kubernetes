@@ -608,7 +608,61 @@ kubectl get networkpolicy
 kubectl get netpol
 
 
+ip a | grep -B3 10.31.136.3
+ip link show eth0
+ip route  > to check the gateway
+ip route show default
+arp node01
+netstat -nplt > to see the proceess types and the ports 
+netstat -anp | grep etcd  > to see no of connections for ip
+ip addr show weave > for mac
+kubectl logs weave-net-c9h7v weave -n kube-system | grep ipalloc  > What is the range of IP addresses configured for PODs on this cluster?
+cat /etc/kubernetes/manifests/kube-apiserver.yaml | grep cluster-ip-range > What is the IP Range configured for the services within the cluster?
+kubectl logs <kube-proxy-pod-name> -n kube-system ??What type of proxy is the kube-proxy configured to use?
+Run the command: kubectl get pods -n kube-system and look for the DNS pods.
+kube-system   kube-dns       ClusterIP   10.96.0.10       <none>        53/UDP,53/TCP,9153/TCP   6m36s
+kubectl -n kube-system describe deployments.apps coredns | grep -A2 Args | grep Corefile
+kubectl describe pods coredns-74ff55c5b-h698z -n kube-system | grep -A2 Args | grep Corefile
+kubectl describe configmap coredns -n kube-system and look for the entry after kubernetes.
+kubectl exec -it hr -- nslookup mysql.payroll > /root/CKA/nslookup.out
+kubectl describe ingress --namespace app-space
+kubectl edit ingress --namespace app-space
+kubectl expose deployment ingress-controller --type=NodePort --port=80 --name=ingress -n ingress-space --dry-run=client -o yaml > ingress.yaml after add nodeport, ns
+Since the blue application and the db-service are in the same namespace, we can simply use the service name to access the database.
+db-service.dev.svc.cluster.local  > service.namespace.svc.cluster.local
+kubectl expose deployment simple-webapp-deployment --type=NodePort --port=8080 --target-port=8080 --name=webapp-service --dry-run=client -o yaml > test.yaml
+note: with out sheduler we can't see the events in pod logs and the pod should be in the pending state forever
+controlplane ~ ➜  kubectl rollout status deployment frontend
+deployment "frontend" successfully rolled out
 
+controlplane ~ ➜  kubectl rollout history deployment frontend
+deployment.apps/frontend 
+REVISION  CHANGE-CAUSE
+1         <none>
+2         <none>
+
+controlplane ~ ✖ kubectl rollout undo deployment frontend
+deployment.apps/frontend rolled back
+
+controlplane ~ ➜  kubectl rollout status deployment frontend
+Waiting for deployment "frontend" rollout to finish: 2 out of 4 new replicas have been updated...
+Waiting for deployment "frontend" rollout to finish: 2 out of 4 new replicas have been updated...
+Waiting for deployment "frontend" rollout to finish: 2 out of 4 new replicas have been updated...
+Waiting for deployment "frontend" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "frontend" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "frontend" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "frontend" rollout to finish: 1 old replicas are pending termination...
+deployment "frontend" successfully rolled out
+
+controlplane ~ ➜  kubectl rollout history deployment frontend
+deployment.apps/frontend 
+REVISION  CHANGE-CAUSE
+2         <none>
+3         <none>
+
+for var in $(kubectl get pods  | awk '{print $1}');  do echo $var; kubectl describe pod $var | grep init; echo"done"; done
+ETCDCTL_API=3 etcdctl --endpoints=https://[127.0.0.1]:2379 --cert=/etc/kubernetes/pki/etcd/server.crt --key=/etc/kubernetes/pki/etcd/server.key --cacert=/etc/kubernetes/pki/etcd/ca.crt snapshot save /opt/snapshot-pre-boot.db
+ETCDCTL_API=3 etcdctl --data-dir /var/lib/etcd-from-backup snapshot restore /opt/snapshot-pre-boot.db
 
 
 
