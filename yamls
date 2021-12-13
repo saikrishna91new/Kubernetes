@@ -50,7 +50,40 @@ spec:
     
  
     
-    
+ selector:
+      matchLabels:
+        name: webapp
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          name: webapp
+      spec:
+        containers:
+        - image: kodekloud/webapp-color:v2
+          imagePullPolicy: IfNotPresent
+          name: simple-webapp
+          ports:
+          - containerPort: 8080
+
+
+
+
+
+
+strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+      
+      
+  
     
     
     
