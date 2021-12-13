@@ -664,7 +664,7 @@ for var in $(kubectl get pods  | awk '{print $1}');  do echo $var; kubectl descr
 ETCDCTL_API=3 etcdctl --endpoints=https://[127.0.0.1]:2379 --cert=/etc/kubernetes/pki/etcd/server.crt --key=/etc/kubernetes/pki/etcd/server.key --cacert=/etc/kubernetes/pki/etcd/ca.crt snapshot save /opt/snapshot-pre-boot.db
 ETCDCTL_API=3 etcdctl --data-dir /var/lib/etcd-from-backup snapshot restore /opt/snapshot-pre-boot.db
 
-
+kubectl set image deployment frontend webapp=kodekloud/webapp-color:v2
 
 
 
