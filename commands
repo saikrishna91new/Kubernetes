@@ -667,6 +667,21 @@ ETCDCTL_API=3 etcdctl --data-dir /var/lib/etcd-from-backup snapshot restore /opt
 kubectl set image deployment frontend webapp=kodekloud/webapp-color:v2
 
 
+  car filename.csr | base64 | tr -d '\n'
+  kubectl run test-nslookup --image=busybox:1.28 --rm -it --restart=Never -- nslookup nginx-resolver-service
+  kubectl run test-nslookup --image=busybox:1.28 --rm -it --restart=Never -- nslookup 10-50-192-2.default.pod
+  
+  
+kubectl auth can-i list nodes --as michelle
+kubectl create clusterrolebinding node-admin-binding --role=node-admin --user=michelle
+kubectl create clusterrolebinding node-admin-binding --clusterrole=node-admin --user=michelle
+kubectl get nodes -o jsonpath='{.items[*].metadata.name}'
+kubectl get nodes -o jsonpath='{.items[*].status.nodeInfo.osImage}' > /opt/outputs/nodes_os.txt
+kubectl config view --kubeconfig=my-kube-config -o jsonpath="{.contexts[?(@.context.user=='aws-user')].name}" > /opt/outputs/aws-context-name
+kubectl get pv --sort-by=.spec.capacity.storage -o=custom-columns=NAME:.metadata.name,CAPACITY:.spec.capacity.storage > /opt/outputs/pv-and-capacity-sorted.txt
+
+
+
 
 
 
