@@ -39,7 +39,10 @@ flow--> web server --> local dns by org/cache iv ip to --> root dns give ip to--
 Route 53: managed,scalable,authorative(user can maintain dns recordds), is domain register gie certs, health check of resources,100% availability sla,port 53 for dns
 RECORD: contains domain or sub domain name/request type (A or AAAA or  CNAME or Alias)/value/Routing policy/TTL,, 
 A: Maps a host name to ipv4,,AAAA: maps ahost name toipv6,,CNAME: maps a host name to another host name and dest ost name is eiter a or aaaa record,, and can't be a 
-root domain ALIAS:is same as root domain only but can also use root,,,NS(naming serer):for hosted zone contain dns name and ip can respond to quaies for trafic route
+root domain ALIAS:is same as root domain only but can also use root,,,
+NS(naming serer):for hosted zone contain dns name and ip can respond to quaies for trafic route
+Hosted Zone: contain record that how to rout traffic 
+
 
 
 
