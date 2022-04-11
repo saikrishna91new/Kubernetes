@@ -32,3 +32,15 @@ Securiyt: IAM roles for only creae and delete cache not for the data inside cach
 types of caching: 1>lazy: some stale data,2> Write through: when db updates cache update no stale data3>session store: session data using ttl:: USE_CASE: leader boards
 in gaming sites as redis sorted set : unique and element ordering new order for new element:PORTS:postgres:5432/mysql:3306/oracle:1521/Mssql:1433/Maria:3306/aurora:5432
 
+DNS: domain name system:convert host name into backend ip, terminology: domain registrer (ca), domain record:a,aaaa,cname,alias zonefile: dns record ,name server:quaries
+(authorative/non autherative)-TLD-.com.in.us.gov,SLD-second amazon.com, 
+flow--> web server --> local dns by org/cache iv ip to --> root dns give ip to--> TLD --> SLD --> here it will send the browser the actual ip of the service
+
+Route 53: managed,scalable,authorative(user can maintain dns recordds), is domain register gie certs, health check of resources,100% availability sla,port 53 for dns
+RECORD: contains domain or sub domain name/request type (A or AAAA or  CNAME or Alias)/value/Routing policy/TTL,, 
+A: Maps a host name to ipv4,,AAAA: maps ahost name toipv6,,CNAME: maps a host name to another host name and dest ost name is eiter a or aaaa record,, and can't be a 
+root domain ALIAS:is same as root domain only but can also use root,,,NS(naming serer):for hosted zone contain dns name and ip can respond to quaies for trafic route
+
+
+
+
