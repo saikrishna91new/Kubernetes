@@ -1,0 +1,20 @@
+use lauch configuration/template, to update give new launch config/template,,free price for backend servers, iam on asg work for backen, if ec2 get temnited fr any reaon
+ASG will recreate, replace instance marked unhealthy by LB. 
+Scaling policies: 2 types 1>Dynamic 2>Predective: 1>Dynamic scaling: 1.1> Target tracking: if avg cpu > 40% increase 1.2>simple/step :can create own cloudwatch alarm and 
+rules like if cpu >80 add 2 ec2 and cpu < 60 remove 2 instnaces can define cloud watch metrics 1.3>schedules:known usage 2>Provisioning:forecast & analysis by asg
+ASG cooldown period:after scaling activity cooldown will come, no launch and terminate in this to stabilize metrics,,def 300sec, low cool hig perf, use golden ami for dis
+ASG termination policy: default: find az with n number of instance, and inside it delete the oldest version means first created, balance instance in az,s along versions
+ASG lifecycle hooks: p.wait,p.proceed,t.wait,t.proceed,, launch  config vs template: template is old not reusable need recreate, config: partial reusable, ondeamand or
+spor or both, recomnded by aws,, both allows ami in confiuration
+RDS: Relational db service : svc manage by aws for db, use sql, types: postgresql, mariadb, mysql, oracle,microsoft sql, use: auto provison,patching,bckp and restoere
+point of time recovery, monitering,read replica, multi az, maintainance wid,auto scal vertical and horizontal,backedebs gp2/3,cant ssh
+Automated backup: daily full bkp in maintainace by aws, transacton logs 5 mins, point oftime recovery(old to 5 mins),7 days retentionsnap shot: manually by user, alive
+until delete,USE:backup specific time,RDS auto scaling: for max storage thresold, rules:storage<10%,low storage for 5mins,no transaction in 6 hours,unexpcted load,all dbs
+Read replicas: 5, for read scale,async eventually consist, update app with all read replica urls, for selectquery only,use: to read db for analysis reporting tools.pay fr
+cross region replicasntwrk no pay fr sameregion,RDS multiaz:DR,stand by in sameregion,write same time,same dns no trouble forapp, autofailover nt scaling,read replicas
+can set as this,how multiaz work:snaptaken,restore in new az,enable sync..RDS encryption: both master and RR with KMS-AES256,at launchtime, if master not RR not encrypt,
+another way TDE(transperant data encrypt),in flight by ssl,force users for this,postgres(rds_force_ssl=1),my sql update with in db, how to encrypt unencrypted rr- restore
+db from it and enableencrypt at launch, SECURITY: ntwrk sec: put in pvt sbnt, iam policy for users managing db,, IAM authentication by iam and rds api calls, sql and 
+postgres only,auth token 15 mins, 
+
+AURORA: not open source, postgress and mysql, 5x on mysql and 3x on postgresof rds, storege autoscale in 10gb and max 128tb, 15 replicas, 20%> rds price,
