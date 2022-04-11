@@ -18,3 +18,17 @@ db from it and enableencrypt at launch, SECURITY: ntwrk sec: put in pvt sbnt, ia
 postgres only,auth token 15 mins, 
 
 AURORA: not open source, postgress and mysql, 5x on mysql and 3x on postgresof rds, storege autoscale in 10gb and max 128tb, 15 replicas, 20%> rds price,
+self healing apps peer to peer if something bad, storge stripped into small pieces, one master for writes and remain reads, master + 15 rr in multi az, write has 
+writer end point url and reader has reader end point only one for all rr actsa as LB,if master fails one of rr turn into master in 30 sec with same writer end point,
+reagonal cluster= write + read endpoint sec smae as rds,, Features: 1>autoscaling: aurora can monitor read req and increase replicas.2>custom end point:some subset of rr
+for analytical quaries, if this avail no use for read endpoint 3>Serverless:automated installation, scaling and pay per sec based on usage,cost effecive, no capaity plan
+generate proxy by aws to connect to aurora, 4>Multi master: immediate failover,every node has read and write asno promote rr as master, 5> Auroraglobaldb: cross 
+regionreplica, 1 primery region and 5 secondary regions, 16 rr across these, latency < 1 sec, rto9recovery time object at DR)< 1 min, for global applications
+6>Machine learning:mlbased predicton, integration b/w aurora and aws ml sevces, support: amzon sega maker and comprehend use: fraud detect, prdct recomndtion,ads trgeting
+
+Elastic cache: redis&mem-cached, in memory db, highperf, lowlatency, reduce to db for common quaries, app ned heavy changes, aws can manage this fully for operations
+redis: multi az/rr/persistance/backup&restore Memcached: multi node(sharding),multi threaded, nopersistant,restore & backup
+Securiyt: IAM roles for only creae and delete cache not for the data inside cache, Redis auth: user/pwd while creating db will used inside app, ssl, memcached-sasl auth
+types of caching: 1>lazy: some stale data,2> Write through: when db updates cache update no stale data3>session store: session data using ttl:: USE_CASE: leader boards
+in gaming sites as redis sorted set : unique and element ordering new order for new element:PORTS:postgres:5432/mysql:3306/oracle:1521/Mssql:1433/Maria:3306/aurora:5432
+
