@@ -89,6 +89,7 @@ we can't see them unless we retrive it, S3 Lfecycle: 1>transaction action: just 
 :for delete after some time use: log files delete, partial upload,old version,,rules can be applied specific path or object,,
 S3 Anlytc: to help lifycycle transaction rules, not onezone-ia, report daily,24 to 48 fr 1st start,, multi upload, prefer >100mb, must >5gb, help parllel upload
 S3 Tranfer acceleration: increase speed as file- aws edge near- s3 bucket,,s3 byte range fetch: can download small parts of download,speedup,to download some part file
-S3 select & glacier select: retrive less data by perform serverside quaries, fast and quick,, S3 Event notifications: action at s3 like 
+S3 select & glacier select: retrive less data by perform serverside quaries, fast and quick,, S3 Event notifications: action at s3 like create, remove, relicated,
+delete object.
 
 
