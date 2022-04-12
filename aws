@@ -50,7 +50,45 @@ by client, Weighted: control % trafic to speciic resource,backend dns have same 
 zero to stop sending, or 0 for all to sent trafic equally,,LATENCY: route to low latency instances, b/w user and aws region,health cheks,FAIL OVER: like dr, 1 primary 
 1 secondary, primary not go for secondary,based on health check,,GEO LOCATION: Depends on location of user, if user in us go this ip,if in german go thi,default record
 use: content loca,restrict in country,load balance,, health checks,,GEO PROXIMITY: baesd on geographic location, biasing,less-low, high-more,, traffic flow must(UI)
+Multi Value: routing to multiple resources/values, health check, 8 health record returned for each value, only healthy records, use dig to check ip's, 
+Health Checks: only for public resources, 3 ways of monitering,1>metric 2>Health check3>cloud moitering,, health check will have their own metrics and integrate with 
+cloud wathc metric, 15 health check check end point, threshold is 3, 30se reguler check,10 sec higher,support https/s,tcp pass code 2xx or 3xx or 1st 5120 bytes data
+CAlculated health check: check multiple checks, user or,and,not operator,256chaild health check,define how many chaild health check, for private use cloudwath metric
+3rd party domain: aws can maintain 3rd party domains, create hosted zone and add ns server to 3rd party, go dady will search for aws r53 by ns server
+HA: Route 53 + ELB + ASG + multi AZ
+Quick instance launching: Golden AMI/bootstraping/Golden AMI + boot straping(hybrid) can have rds db, esb..etc
+EBS(elastic bean stalk)auto provisioning,load balancing,instance config.go,java,.net,php.etc
 
+AWS S3: Infinay scaling storage, object stored in bucket, globaly unique name, **s3 is global level and bucket is regional level, key/value - path/file, max 5tb(5kgb)
+if >5tb multi part upload, object have meta data,upto 10 tags,versioning,, how to open file in s3 2 from aws console open(presigned)/public access link,versioning at
+bucket level, version come for new files, for old files version is null, use: unintended delte,rollback,, suspending version dont delete previous files,d/f version id 
+for every upload,delete marker- file is not available but older versions are there,can delete this if needed,
+S3-Encryption: SSE-S3/SSE-KMS/SSE-C/Client side> 1>SSE-S3:serverside,aes-256,header x-amz-server-side-ecryption:aes-256,key own by AWS,2>SSE-KMS: server side, key
+maintained by kms,header sert to awskms,use:user control + audit on key 3>SSE-C:key maintain by user,sent in https header for all request,same key for decrypt, https 
+traffic to s3 4>Client side encruption: user encrypt/decrypt data before s3,, Encypt intranstion:s3 have 2 ends http/https any thing can ue: https sure for sse-C
 
+S3 security: user based: IAM policy to control api calls on s3, resource based: bucket side rules,define principles,object and bucket acl (access control list)
+if iam policy permission accept, reource policy allo itno explicit deny rule
+s3 bucket policy:jsone;same format as iam policy, version,id,statement,sid,effect,principal,action,resources,use: grant public access,force object to encrypt at upload
+grat access to other account,, logging and audit: s3 access logs can stord in other buckett, api calls can be logged in aws cloud trail,, user security: MFA delete, 
+presigned url: temporary url for limited time,,for 403 check public access and policies
+S3-CORS: (cross origin resource sharng)- getting resources fro different origin, to allows thos cors headers eg: access-control-allow-origin,, allow oother origins
+IAM policy simulator to test the policy,, ec2 instance metada: http://169.254.169.254/latest/meta-data,,aws-sdk control aws from app,, mfa needed for delete and suspend
+versioning, not for enable version, bucket owner or root can enable/disable MFA,,s3 encryption 2 ways: hw to force: s3 policy condition,default encryption(dont do for
+already encrypted ones)--access logs: all requestt details accept,deny,action, athen to analyse,**never make logging bucket same bcome loop,,
+
+S3 replication: CRR/SRR/different acnt, must versining, asynchronus copy, must properr iam perission,not retro active only new objet will replicate,for delete 2 options 
+replicate/non replicate for malicious deletes,no chaining one to one relation,
+S3 presigned url: sdk and cli, download(cli) upload (sdk and hard), 3600 sec r set --expires-in time,inherit permisn of user granting,use:temporar acess,
+Storage classes: standers,stander-IA,onezone-IA,intelligent tiering,glacier,lacier deep archive,reduced redundancey storage(depricated)
+1>S3 standerd:high durability,availability 99.99,sustainn 2 concurrent fails for DR, 2>S3 Standerd IA: less frequently,availability&durability-99.99,low cost,2 failure
+3>s3 one zone ia: single az,low latency, support ssl, 20% cost < IA, use :store second bkp,thumbnails4>Intelligent tiering: monitering monthy,auto-tiering fee,auto_
+matically moves,5> Glacier or vault: for archives/backups,long term 10 years, dur 99.99, per mnth $0.004/GB, stored in vaults,retrival 3 options: expidiated (1-5msn),
+standerd (3 to 5),bulk(5 to 12 hrs),, min time 90 days,, 6>Glacier depp archives: more long time, more cheaper, retrival: standerd:12 hrs, bulk 48 hrs, ** for glacier 
+we can't see them unless we retrive it, S3 Lfecycle: 1>transaction action: just move, move object to ia after 60days,move to glaicer after 6 months 2>Expiration actions
+:for delete after some time use: log files delete, partial upload,old version,,rules can be applied specific path or object,,
+S3 Anlytc: to help lifycycle transaction rules, not onezone-ia, report daily,24 to 48 fr 1st start,, multi upload, prefer >100mb, must >5gb, help parllel upload
+S3 Tranfer acceleration: increase speed as file- aws edge near- s3 bucket,,s3 byte range fetch: can download small parts of download,speedup,to download some part file
+S3 select & glacier select: retrive less data by perform serverside quaries, fast and quick,, S3 Event notifications: action at s3 like 
 
 
