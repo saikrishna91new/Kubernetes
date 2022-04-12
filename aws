@@ -39,10 +39,17 @@ flow--> web server --> local dns by org/cache iv ip to --> root dns give ip to--
 Route 53: managed,scalable,authorative(user can maintain dns recordds), is domain register gie certs, health check of resources,100% availability sla,port 53 for dns
 RECORD: contains domain or sub domain name/request type (A or AAAA or  CNAME or Alias)/value/Routing policy/TTL,, 
 A: Maps a host name to ipv4,,AAAA: maps ahost name toipv6,,CNAME: maps a host name to another host name and dest ost name is eiter a or aaaa record,, and can't be a 
-root domain ALIAS:is same as root domain only but can also use root,,,
+root domain ALIAS:is same as root domain only but can also use root,,,Alias: work for root and non root, health check,auto recginise backend ip changes, suported 
+backends: elb, cloudfront,api,ebs,s3,vpe end points,oter r53 record in same hosted zone,global accelerator
 NS(naming serer):for hosted zone contain dns name and ip can respond to quaies for trafic route
-Hosted Zone: contain record that how to rout traffic 
-
+Hosted Zone: contain record that how to rout traffic,2 public (internet)and private(vpc), $0.50 per month
+**Nslookup ordig cmds for lburl tosee the backend ips, TTL: time to leave, attach in client responce along public ip,2 high,low..High: less trafic for r53 but old data
+Les: More traffic for r53 less ooutdated,must for all record type not ALIAS, dig command to see ttl
+ROTING POLICY: simple,weighted,failover,latency based,geolocation,geo proximity,multi-value,, SIMPLE: tosingleresource, multiple values can,send to client, best chosen
+by client, Weighted: control % trafic to speciic resource,backend dns have same name and type, health checks,use: LB b/w regiosn, test new ap fr less trafic, weight 
+zero to stop sending, or 0 for all to sent trafic equally,,LATENCY: route to low latency instances, b/w user and aws region,health cheks,FAIL OVER: like dr, 1 primary 
+1 secondary, primary not go for secondary,based on health check,,GEO LOCATION: Depends on location of user, if user in us go this ip,if in german go thi,default record
+use: content loca,restrict in country,load balance,, health checks,,GEO PROXIMITY: baesd on geographic location, biasing,less-low, high-more,, traffic flow must(UI)
 
 
 
