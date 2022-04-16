@@ -90,6 +90,31 @@ we can't see them unless we retrive it, S3 Lfecycle: 1>transaction action: just 
 S3 Anlytc: to help lifycycle transaction rules, not onezone-ia, report daily,24 to 48 fr 1st start,, multi upload, prefer >100mb, must >5gb, help parllel upload
 S3 Tranfer acceleration: increase speed as file- aws edge near- s3 bucket,,s3 byte range fetch: can download small parts of download,speedup,to download some part file
 S3 select & glacier select: retrive less data by perform serverside quaries, fast and quick,, S3 Event notifications: action at s3 like create, remove, relicated,
-delete object.
+delete object. can create rules, use sns,sqs or lambda,many events support, if 2 simultanius updates for non-version s3 only one evne trigger, if need exact events
+then we need versioning enablesd, S3REQUESTOR PAYS: for data transfer requester pay for ntwrk cost but authorised user,,ATHENA: serverless query for s3,sql,$5 for tb
+support csv,json,orc,,use compressed orcolumn data cost save,,business intelligence,report,anlyse,vpc flow logs,cloud trails,,Glacier vault lock:adopt WORM(write 
+once read many),objct and lock can't be delete,, OBJECT lock: must versioning,WORM,block delete for some retention time 2 type: rentention period: some time 2>Legal 
+hold: no psecific time Modes: governance mode: cant alter or delete objct, compliance mode: can't alter rootention mode even root
+
+AWS CLOUD fRONT: CDN (content delivery network) improcve read perf, caching,216 edge globaly,DDOS protection,integrate with shield and WAF, reduce load on s3,
+Origins: s3(sec with OAI -orign access only, ingress to upload to s3),alb allow sg of public ip fr edge locations,ec2,s,any http backend,,
+GEO Restriction: white list: allow useres if they are in speciic country, black list: deny access if they are in specific countires,,use : copyright laws
+cloud front vs s3 cross region replication: CDN: cachce and static data,S3 cross:fr dynamic data near real time,, signed url: temporary access, URL expiration + cookie,
+ip range to allw,trusted signers,uses: shared and private content..signed url:access to individual files,, signed cookies: aaccess to multiple files 
+cloud front signed url vs s3 presigned url: cdn:acces to any path filters for ip,pat &caching&root only mainina,,s3:IAM users, no filters,inherits url created permissions
+prcing: edges are global, price varies from region, reduce no of edge for cost saving,, Multi origins: DR, 1 primary and 1 secondary, Field level encryption: data is
+encrypted at edge location with public key, can do for specific fields of data in one post, addition sec than https,,
+GLOBAL ACCELERATOR: send trafic in aws network instead of public, unicat/anycast ip: unicast ip: one service one ip, any cast: all services one ip, global accelerator 
+uses any cast ip,2 anycast ip, dircet to dge location,great for dr, helath checks < 1 mins unhealty, sec: only 2 ips can be witelisted, work as proxy at edge fr sercs
+Global accelerator  vs cloud front: Global: non http nd htpp, no cahce, app with satic ip,fast regional failover CDN: integrate with shield for ddos, caching
+
+SNOW FAMILY: secure and portable devices collect and process and migrate data a t edge,,data migration:snow cane, snowball edge,snow mobil edge computing: cone and ball\
+challeges for data migration: conectvity, bw,ntwrk cost,price, connection stability,, snow family: ofline devices in post,, SNOW BALL EDE: tbs & pbs, suprt block and s3
+pay per data,2 type storage 80tb/compute otimized 40tb,us : cloud migratin,decom of dc, dr in aws,, SNOW CONE: small device,etheret,8tb,SNOW MOBILE: Truck, 100pb,
+truck sec gps,vidoe survlencs 24/7,,edge computing: places with limited/no internate and computing power, aws ops hub: software for snowfamily suport clustering
+snow cone: 2cpu,4 gb ram: snow ball edge storage: 52 cpu,20gb ram,42tb usable storage,,snowball edge copute: 40 vcpu,80gb ram
+
+
+
 
 
