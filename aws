@@ -1,3 +1,71 @@
+AMazon.com, netflix 
+Region is cluster of DC's and most services regional scope,, az- min2/6 - usual 3, azs superate for dr and ntwrk connected
+choosing: compliance, proximity, available services, pricing
+2 types of services global/regional
+
+IAM: user - group -ploicy (JSON),, least privilage prinnciple,, group onley user not group,, permission inheritance. console login/access key
+policy- versio,id,statement{sid, effect(allow),principle(acount assign), actions,resource,condition}
+user security-- password policy, MFA (password + taken in the mobile - user -security credentials - mfa) 
+MFA : virtual MFA (google authenticator, authy),,universal 2nd factor u2f: physical, 3rd party, multi root ac support,, hardware key fab(gemalto) for aws gov cloud 
+password policy: user account settings-pwd policy,, min max length, upper, aplhanumneric, expireation, reuise , user own change
+access key: cli,sdk(sdk,mobile sdk,iot device sdk), generate by user, user- generate access key  ,, only one time download, multiple create (key id/secret key get)
+commad line: aws cli (nearest region )/ cloud shell(default region) - both need proper permission for acs
+ROLES:for services-ec2,asg,lb,sqs,sns/**security tool1>credentials report(acnt)-details about user account 2>acess advaisor(user activity- analyse fr least priviliged)
+
+EC2:cap:running vm,storing data with ebs/efs, distributing load(LB), scaling automatic(ASG),, every ec2 has os,cpu,ram, nwk, hardware (instance store),firewall(SG),
+ntwk card, bootstrap script (user data - first startup for sftwr inslltions **will run with root only)
+types:1>GEneral perpose: dicersity of work load balance for compute,memory and network - m,t series) 2> compute optized: high performance proceesor(batch process, 
+media transcoding,hpc,scintific,ml,gaimg servers - c series) 3> memory optimized: process large set of mem: 1> high performdb, webscale cacje,inmemory db,
+real time process of big unstructured data- R and x series) 4>storage - high for read and write for local storage) - oltp (online transaction processing), 
+relational and no sql, cache for in memory db redis, distributed fs - i and d series)
+
+SG: firewall on ec2, only allow rules, refer by ip or sg,, superate for inbound and outbound)(protocal,tcp/udp/http, port range,source), work as firewall
+one sg to many svcs,**locked down to vpc or region,, sg is out side of ec2, good to sup sg for ssh, all inbound blocked all outbound allowd by default,
+sg isues time out and not accessible/ non sg related : connection refused,not launched,, sg can allow multiple sg as inbound,, used to control incoming trafic 
+
+ssh: default user, ssh -i public.key  ec2user@public ip for lap pvt ip for infra, 0400 permissions
+ssh issues: 1>connection time: sg issues if still issue with company or prsnl firewall 2> connection refused: restart 3>permission denied : key issues
+4> work befire not wrkng now: check the publicp if ec2 rebooted
+
+ec2 instance role: use case: to use aws cli we have to give userid/pwd not safe so execute aws cli from an ec2 and assign proper roles for that ec2 to avoid credentials config
+
+PURCHASING OPTIONS: 1> on demand: short workload and predictable pricing 2>Reserved: long workload like db, can covert instacne type , scheduled long work load everyday
+3>Spot instance 4>Dedicated host,,,1>dedicated: pay per second(linux,windows) pay per hour for other, no upfront payment, no interupt 2> REserved: *75% discount **1-3 year 
+no upfront, partial, full (more dscount) supports schedulable evry day for 1 hr like,3>Spot:*90%,*spot+ondemand, not for critical, max proce < spot prize, price change frqntly
+if pice < spot 2 things stop or trminate4>dedicated host (physical server with ec2 capacity): *3 year, own licence and compliance usage, more expensive 4.1>dedicated host(instance 
+running on hardware dedicate, after restart can place on other hardware)
+
+IP's:public ip:can be identified on internet, uniques in www, geo-lated easily, private:uniques in private nwk,2 df pvt nwk has same ip,,elastic ip:fixed ip ipv4,chargable after allocation
+
+ec2 placement groups: 1.cluster: single az, low latency, high perfor and risk,2>Spread:across az 7 per az.ha,3>Partition:7 partitions(rack) per az,100 limit,ha
+
+ENI:1 public ip, 1 private ip, i elastic ip, 1 r more sg, 1 mac addr**az bound, easily  reasing to other ec2 helpfull in dr to have same ip
+
+EC2 Hibernate: in memory ram is stored to root ebs with encrypted,os boot is high speed,**ebs is root and ram <150gb,**linux,ubunut ami**ondemand and reserved*must encrypt ebs*c,m,r series
+ec2 nitro: advanced version, hish speed 64k ipos 2 time for normal, vcpu: thread in main cpu, can optimize the vcpu at launch time based upon perf
+
+EBS: ntwrk drive so bit latency can attach to one ec2 at a time, persist after termination for root volume ebs (default), esb nwtrk stcks, can move acress ec2 in failurs,**bound to az 
+for other az create snap shot and copy to other az,**30gb general purpose free storage per mnth, *efault destroy after ec2 terminationcan change, provison in 2 ways size and iops 
+ebs snap shot we can take at any point of time, not neceesary to detach but good practise,, 
+
+EC2 Instance store: hard drive attached from the hardware where ec2 hosted,, very high speed, *ephermal: lost if ec2 down, good for cache,buffer,,exam: high performance storage
+AMI: Amazon machine image, contain os,config,softwares,,aws has default we can customise them,,**bound to a specific region can copy to others types public/own/market place,, 
+
+EBS volume types:1>gp1/gp2 ssd,10 gb increase if disk low,root,3000 ips/max 16000,1gb to 16tb 2>io1/io2 ssd, 4gb-16tb, 32k iops/ for nitro 64k ipos, app need >16k iops this good, 
+esb multi attach,3>st1/sc1 500mb-500iops/250mb-250 iops big data,log process/infrequent acess ,lowest cost
+EBS multi attach: one to many ec2 with read and write, io1/io2,,encryption with kms: data at rest, inflight, snapshot, volumes by ebs..low latency,,2 ways 1>create snap,encrypt and restore 
+2>while creating volume enable encrypt
+
+EFS: ntwrk fs, one to many,*multi az,posix fs fr linux only, data sharing and web serving, auto scaling pay per use,3 mondes 1>performance(general,max io)2>Throughput(bursting1tb/50-100mbps/
+provison-1tb-igbps)3>storage(standerd-for frequent,infrequent access-cost to retrive,lower cost to storage)-mount 1>dns2>ip>dns-install amazon util lib,create fs and mount,add nfs in sg
+
+LB: single point od dns, handle failures of down stream,health check,ssl,sticky ness, ha in multi az, superate private and public traffic>ELB is aws managed for ec2,ecs,asg,route 53,waf
+types 4 clb,ALB,NLB,GLB,, 1>CLB: tcp(layer4),https/s(layer7),fixed host name 2>ALB:http,websocket,multi apps through TG,redirects, routing table on url,ip,query string, app srvr no idea 
+of user ip,400ms latency, x-forwarded-for, x-forward-port,x-forward-prot),,3>NLB:layer4,100ms latencr, *one static ip for az support elastic ip, can send to ec2, ip private, alb
+
+
+
+
 use lauch configuration/template, to update give new launch config/template,,free price for backend servers, iam on asg work for backen, if ec2 get temnited fr any reaon
 ASG will recreate, replace instance marked unhealthy by LB. 
 Scaling policies: 2 types 1>Dynamic 2>Predective: 1>Dynamic scaling: 1.1> Target tracking: if avg cpu > 40% increase 1.2>simple/step :can create own cloudwatch alarm and 
@@ -113,6 +181,17 @@ challeges for data migration: conectvity, bw,ntwrk cost,price, connection stabil
 pay per data,2 type storage 80tb/compute otimized 40tb,us : cloud migratin,decom of dc, dr in aws,, SNOW CONE: small device,etheret,8tb,SNOW MOBILE: Truck, 100pb,
 truck sec gps,vidoe survlencs 24/7,,edge computing: places with limited/no internate and computing power, aws ops hub: software for snowfamily suport clustering
 snow cone: 2cpu,4 gb ram: snow ball edge storage: 52 cpu,20gb ram,42tb usable storage,,snowball edge copute: 40 vcpu,80gb ram
+
+FSX: 3rd party fs by fsx, types: fsx for luster,windows,netapp ontap,directly launch at aws,,windows: smb, ntfs protocal,scale 10gb,ssd,onpremise also,daily bkp to s3, multi az
+CLuster: luster, large scale, use: machine learning, hpc,, scale in 100gbs,sub mil latency, cont integration with s3, can write to s3 by fsx,on-premise also
+types of fsx: sccratch file system: temporary,short term,6x faster than normal,200mbps per tb,2>persistant: lonng term,same az replica
+Hybrid cloud: some part of infra on cloud and some on-premise use:migration,elastic only on cloud
+
+Storage gateway: bridge bw s3 and on-prem use: DR, backups&restore, 3 types: file,volume,tape gateways,, can import either to ebs,s3,glacier
+
+
+
+
 
 
 
