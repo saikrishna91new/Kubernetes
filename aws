@@ -188,6 +188,22 @@ types of fsx: sccratch file system: temporary,short term,6x faster than normal,2
 Hybrid cloud: some part of infra on cloud and some on-premise use:migration,elastic only on cloud
 
 Storage gateway: bridge bw s3 and on-prem use: DR, backups&restore, 3 types: file,volume,tape gateways,, can import either to ebs,s3,glacier
+File Gateway: configured s3 buckets aceess by nfs and smb, support standers,ia,glacier,one zone ia,use iam roles,caching,integrates with AD
+Volume Gateway:block storage, iscsi protocal backed by s3,ebs snap shots,2 types 1> cached volumes: low latency 2>stored volume: entire data on-premise and backup to s3
+Tape Gateway: backup by tapes stored in cloud, vtl (virtual tape library), use iscsi protocal,,, * in all above 3 gws hardware is installed on client side if no hardware
+available then aws will provide that "Storage gtway - hardware appliance" 
+Exam questions: account/nfs with ad - file gateway,,volume/block storage : volume, tapes:tape , no onpremise virtual server: hardware
+FSX gateway: access to fsx windows,cache,smb,nfts,ad,group file share or direecctory
+AWS TRANSFER famialy: transfer files from in and out to s3 and efs using ftp , ptocals : ftp, ftps,sftp , multi az, pay per provisoin,integrates with ad and cognito,,
+
+Integration and messaging:
+-------------------------
+Orchastrating stuff between different services using middleware, application communication 2 types: 1> Synchronus (application to application)2>Asynchronus (app to 
+que to app),, synchronus: neg: sudden spikes for traffic, so we need to decouple the application by SQS(que),SNS(pub/sub),Kinesis(data strem),,scale independantly
+
+SQS(simple qeueing service)?? Que contain messages, producer, consumer, send messages, poll messages, stabderd que, unlimited through put and messages in the ques,,
+retention: min 4 days, 14 max days,, low latency, 256 kb per msg, can have duplicate mss at lease once delivery, out of order messages best effort ordeering 
+
 
 
 
