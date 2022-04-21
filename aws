@@ -203,6 +203,13 @@ que to app),, synchronus: neg: sudden spikes for traffic, so we need to decouple
 
 SQS(simple qeueing service)?? Que contain messages, producer, consumer, send messages, poll messages, stabderd que, unlimited through put and messages in the ques,,
 retention: min 4 days, 14 max days,, low latency, 256 kb per msg, can have duplicate mss at lease once delivery, out of order messages best effort ordeering 
+producing msg: sdk send message api, retention 4 to 14 days,,consumer: app on ec2,onpremise,lambda, can receive 10 msgs at a time, will proccess and delte the 
+message with delete message api, POLL FUNCTIONS: can have multiple consumer receive parllel,, At leaseet once delivery: if msg is not proccess send to other que,,
+horizontal scaling by asg as per que metric,, security: inflight,at rest,client side encrypt,,ACESS CONTROL: IAM POLICY to SQS API. SQS Policy: si,ilar to s3 policy, 
+cross account, allow sns ans s3 to send msg to que, msg contains metadata,sender,receoved count,size,body,attributes,poll count,, Purge que: delete all messages in que
+google available policies and edit it, Messaaage visibilty time out: if consumer unable to procees the message with in time default 30 sec, after the time if msg
+not proceed again the message is visiable can take by other consumer by change message visibility api,, visibility time : high then take hours if consumern failed, 
+less : may cause duplicates,,
 
 
 
