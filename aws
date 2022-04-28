@@ -212,7 +212,32 @@ not proceed again the message is visiable can take by other consumer by change m
 less : may cause duplicates,,high: takes log time to come back if consumer crashes,,DEAD LETTER QUE: DLQ: as knows if msg wasn't process it ccomes back to que and
 it comes back oftnelu its issues with que or cosnumer, limit: max-receiver treshold" if it reaches move it to dlq good for debug, make retention period as max 14d
 Delay Que: message get delay meeans consumer didn't see the msg default 0 max 15 mins, que level parameter "delay seconds" Long polling: how much time that consumer 
-wait at que. 1 to 2 sec, reduce latency, reduce no of api calls to sqs, que level, api leve wait time sec 
+wait at que. 1 to 2 sec, reduce latency, reduce no of api calls to sqs, que level, api leve wait time sec,, Request responce system: msg consists of 3 parts
+1>correlation id + 2>reply to responce que+3>context, create a temprory virtual ques,, FIFO: first in first out: ordering of mmsgs,, ordering of msg,thughpt limit
+with batch: 300 without:3000, delivery once, process in order,, SQS ASG: cloud metric, que length/no of index, one alrm for scale in and ither for scale out
+
+SNS: simple notification service , one message to many receivers, pub/sns-topic/sub,,by deafult all sub get all msgs,,10lak subscribers,1 lakh topics,  subs can be sqs,
+http/s,lambda,sns,all aws servcs can send msgs to sns,, security; inflight,at rest, client side,, access control: aim to sns api,, sns access policy: cross accoutnt 
+and other service,,,Fan Out: sns + sqs : multiple sqs as sns sub,, use case: s3 event to multiple sqs, sns fifo available also,,, Message filtering: json policyt
+
+Kinesis: collecct, process and analyse streaming data in real time,,logs,metrics,,,4 componenets:  data strea, firehose,analysis, video streaming..
+
+Data Stream: capture,process,store data,, contain shard, scale shards, producers are apps and clients,,use sdk,kpl (kinesis produce library), agent,,,, data sent in
+record (partion key + data blob 1mb), thrput shrd: 1 mbps,1000mbps,, consumer to consume msgs,,consumer will be app,lambda,firhose,analytics,, consumer will take 
+same primary key and data blob,, consumption mechanisoms: 1> shard: 2mbps acrs all consumer 2>enhanced: same mbps,, billing per shard, retention 1d to a year,,data 
+with same part key go to same shard, consumer : kcl,sdk, lambda,fire hose, analytics..
+
+Data Firehouse: load data to data strore,, data comes in record lamda process it and write to db as batches , near real time, backed to s3,,pay per data, 60 sec 
+latency, 32 mb data at a time,,
+
+Data analytics:  perform real time analytics with sql, server less, auto matics scaling, real time,pay per consumtion rate,, use: real time dash board and metrics,
+and time series analytics,,
+
+data stream vs sqs ordering: ds: 20 trucks per shard, 5 consumer for shord, max 5 shordds, 1 shord = 1 mb,, sqs fifo: one que, 100 consumers, 300 msg/sec with  out
+batching and 3000ms with batching,, 
+
+Amazon MQ:sqs,sns are cloud native, on prem use so many other messagings, use amazon mq to avoide reengineering,, doesn't scale as sns/sqs,,HA(active and standby)
+
 
 
 
