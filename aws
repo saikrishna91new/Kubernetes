@@ -209,10 +209,10 @@ horizontal scaling by asg as per que metric,, security: inflight,at rest,client 
 cross account, allow sns ans s3 to send msg to que, msg contains metadata,sender,receoved count,size,body,attributes,poll count,, Purge que: delete all messages in que
 google available policies and edit it, Messaaage visibilty time out: if consumer unable to procees the message with in time default 30 sec, after the time if msg
 not proceed again the message is visiable can take by other consumer by change message visibility api,, visibility time : high then take hours if consumern failed, 
-less : may cause duplicates,,
-
-
-
+less : may cause duplicates,,high: takes log time to come back if consumer crashes,,DEAD LETTER QUE: DLQ: as knows if msg wasn't process it ccomes back to que and
+it comes back oftnelu its issues with que or cosnumer, limit: max-receiver treshold" if it reaches move it to dlq good for debug, make retention period as max 14d
+Delay Que: message get delay meeans consumer didn't see the msg default 0 max 15 mins, que level parameter "delay seconds" Long polling: how much time that consumer 
+wait at que. 1 to 2 sec, reduce latency, reduce no of api calls to sqs, que level, api leve wait time sec 
 
 
 
