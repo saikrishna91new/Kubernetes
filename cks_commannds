@@ -1,0 +1,15 @@
+sh ./Assessor-CLI.sh -i -rd /var/www/html/ -nts -rp index    - os level
+curl -L https://github.com/aquasecurity/kube-bench/releases/download/v0.4.0/kube-bench_0.4.0_linux_amd64.tar.gz -o kube-bench_0.4.0_linux_amd64.tar.gz
+tar -xvf kube-bench_0.4.0_linux_amd64.tar.gz
+check the kube bench doccumentation
+openssl x509 -in /etc/kubernetes/pki/ca.crt -text
+cat akshay.csr | base64 -w 0
+k config --kubeconfig /root/my-kube-config current-context
+k config --kubeconfig /root/my-kube-config use-context research
+10250: full acess and 10255 is read only access
+k exec ubuntu-sleeper -- whoami
+kubectl exec -it kube-apiserver-controlplane -n kube-system -- kube-apiserver -h | grep 'enable-admission-plugins'
+ps -ef | grep kube-apiserver | grep admission-plugins
+k get ns --show-labels
+53 tcp/udp port only for egress rules 
+kubectl create configmap untrusted-registry --from-file=untrusted-registry.rego
