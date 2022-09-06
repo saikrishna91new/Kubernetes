@@ -13,3 +13,24 @@ ps -ef | grep kube-apiserver | grep admission-plugins
 k get ns --show-labels
 53 tcp/udp port only for egress rules 
 kubectl create configmap untrusted-registry --from-file=untrusted-registry.rego
+
+envFrom:
+      - secretRef:
+          name: mysecret
+          
+          
+
+runc - default container run time responsible for creating the container
+ k get runtimeclasses
+  k describe runtimeclasses gvisor
+  kubesec scan /root/node.yaml  > /root/kubesec_report.json
+
+trivy -h
+trivy -v
+trivy image --severity HIGH --output /root/python.txt python:3.10.0a4-alpine
+trivy image --input alpine.tar --format json --output /root/alpine.json
+ systemctl status falco
+ journalctl -u falco
+ journalctl -fu falco
+ readOnlyRootFilesystem: true & previlized is false for immutable fs and add volumes
+ 
