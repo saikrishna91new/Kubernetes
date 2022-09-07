@@ -33,4 +33,28 @@ trivy image --input alpine.tar --format json --output /root/alpine.json
  journalctl -u falco
  journalctl -fu falco
  readOnlyRootFilesystem: true & previlized is false for immutable fs and add volumes
+ passwd david
+ deluser ray
+ delgroup devs
+echo "text" | base64 --decode
+cat csr | base64 | tr -d '\n'
+usermod -s /usr/sbin/nologin himanshi
+adduser jim
+ssh-copy-id -i ~/.ssh/id_rsa.pub jim@node01
+jim ALL=(ALL:ALL) ALL
+
+
  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+      
