@@ -42,6 +42,18 @@ usermod -s /usr/sbin/nologin himanshi
 adduser jim
 ssh-copy-id -i ~/.ssh/id_rsa.pub jim@node01
 jim ALL=(ALL:ALL) ALL
+jim ALL=(ALL) NOPASSWD:ALL
+usermod rob -G admin - add user to a group
+%admin ALL=(ALL) ALL
+/etc/ssh/sshd_config
+----------------
+PermitRootLogin no
+PasswordAuthentication no
+service sshd restart
+----------------------
+
+
+
 
 
  
