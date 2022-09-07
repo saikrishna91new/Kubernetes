@@ -52,6 +52,45 @@ PasswordAuthentication no
 service sshd restart
 ----------------------
 
+apt list --installed
+systemctl list-units --type service
+lsmod
+vim /etc/modprobe.d/blacklist.conf   > need reboot after this
+apt remove nginx -y
+apt install wget -y
+systemctl status ufw or ufw status
+ufw status numbered
+ufw allow 1000:2000/tcp
+ufw reset
+ufw allow from 135.22.65.0/24 to any port 9091 proto tcp
+ufw enable
+ufw deny 80
+ufw disable
+strace -c ls /root
+/var/lib/kubelet/seccomp default seccomp profile
+
+---------------
+spec:
+  securityContext:
+    seccompProfile:
+      type: Localhost
+      localhostProfile: profiles/audit.js
+      ---------------------
+      
+      
+  apparmor-parser -q /etc/apparmor.d/file
+  
+  metadata:
+  annotations:
+    container.apparmor.security.beta.kubernetes.io/nginx: localhost/restricted-nginx
+    
+    
+    
+    
+ 
+
+
+
 
 
 
