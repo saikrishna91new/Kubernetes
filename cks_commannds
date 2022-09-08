@@ -83,7 +83,11 @@ spec:
   metadata:
   annotations:
     container.apparmor.security.beta.kubernetes.io/nginx: localhost/restricted-nginx
-    
+ 
+ 
+ kubectl create configmap unique-host --from-file=/root/unique-host.rego
+ 
+ 
     
     
     
